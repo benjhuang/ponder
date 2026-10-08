@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ponder has moved</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://ponder-cards.github.io/">
+<meta http-equiv="refresh" content="3; url=https://ponder-cards.github.io/">
+<style>
+  body { margin: 0; min-height: 100vh; box-sizing: border-box; padding: 24px;
+         display: grid; place-items: center; text-align: center;
+         background: #0b0a0e; color: #ece6dc; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: #d9b56a; }
+</style>
+</head>
+<body>
+<p>Ponder has moved to <a id="to" href="https://ponder-cards.github.io/">ponder-cards.github.io</a>.</p>
+<script>
+// Ponder moved from benjhuang.github.io/ponder to ponder-cards.github.io.
+// Favorites live per web address, so this page sends this browser's favorites along.
+(function () {
+  var to = new URL("https://ponder-cards.github.io/");
+  var here = new URLSearchParams(location.search);
+  ["card", "view", "favs"].forEach(function (k) { if (here.has(k)) to.searchParams.set(k, here.get(k)); });
+  if (!to.searchParams.has("favs")) {
+    try {
+      var favs = JSON.parse(localStorage.getItem("ponder.favs.v1") || "[]");
+      var codes = favs.slice(0, 300).map(function (c) { return code(c && c.id); }).filter(Boolean);
+      if (codes.length) { to.searchParams.set("favs", codes.join(".")); to.searchParams.set("moved", "1"); }
+    } catch (e) {}
+  }
+  document.getElementById("to").href = to.toString();
+  location.replace(to.toString());
+
+  // Same 22-character id format that Ponder uses in its links
+  function code(id) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id || "")) return "";
+    var hex = id.replace(/-/g, ""), bin = "";
+    for (var i = 0; i < 32; i += 2) bin += String.fromCharCode(parseInt(hex.slice(i, i + 2), 16));
+    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+})();
+</script>
+</body>
+</html>
